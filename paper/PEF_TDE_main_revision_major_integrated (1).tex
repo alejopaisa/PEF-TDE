@@ -1,0 +1,620 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{authblk}
+\usepackage{natbib}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\graphicspath{{figures/}{./}}
+\onehalfspacing
+
+\title{An Empirical Phenomenological Classification Framework for Deviations from Canonical Fallback in Tidal Disruption Event Light Curves}
+\author{Independent Researcher}
+\date{Final integrated submission-ready draft}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Tidal disruption event (TDE) light curves are often compared with the canonical $t^{-5/3}$ fallback decline, but observed band-limited light curves frequently show plateaus, excess emission, and wavelength-dependent morphology. We introduce PEF--TDE as an empirical phenomenological classification framework for organizing such deviations from canonical fallback. The framework compares three minimal observational components: a standard fallback decline, a persistent floor, and a time-dependent exponential-family excess. The exponential term is not derived here from first-principles accretion physics and is not used to identify a unique physical mechanism. Instead, its timescale $\tau$ is treated as an effective observational descriptor of a time-dependent departure from fallback.
+
+We apply the framework to an exploratory, non-population-complete sample of six TDEs and fit each event and band independently. Model selection is performed using $\chi^2$, AIC, BIC, and the finite-sample corrected AICc. We also include residual-distribution diagnostics, Q--Q checks, lag-1 autocorrelation/Durbin--Watson diagnostics, and explicit filtering criteria for pathological or unconstrained fits. The resulting classifications show that no single minimal component describes all events or all wavelength bands. The framework is therefore best interpreted as a compact observational taxonomy rather than a predictive physical model. It provides a reproducible way to identify events and bands that require additional time-dependent or persistent structure beyond canonical fallback, thereby motivating future physical modeling with larger samples and full posterior parameter inference.
+\end{abstract}
+
+\section{Introduction}
+Tidal disruption events occur when a star is disrupted by the tidal field of a supermassive black hole. A fraction of the stellar debris remains bound and returns to the black hole, producing a luminous transient. The canonical theoretical expectation is that the fallback rate follows an approximate $t^{-5/3}$ decline \citep{rees1988,phinney1989}. This model remains the natural baseline against which TDE light curves are compared.
+
+Observed TDE light curves, however, often depart from a pure fallback decline. These departures include late-time plateaus, excess emission, band-dependent evolution, and residual structures that cannot be summarized by a single power law. The goal of this work is not to derive a new first-principles physical model of TDE accretion. Instead, we introduce a compact empirical framework for classifying observed deviations from canonical fallback in a reproducible way.
+
+The PEF--TDE framework is therefore an observational taxonomy. It compares a small set of low-dimensional phenomenological components---standard fallback, a persistent floor, and an exponential-family time-dependent excess---using parallel model selection. This approach is designed to identify which minimal component dominates the observed morphology in each event and band. The resulting classifications are intended to guide further physical modeling, not to replace detailed accretion, reprocessing, radiation-transport, or hydrodynamical calculations.
+
+The sample analyzed here is intentionally exploratory and is not statistically complete. It is used as a proof-of-concept set to demonstrate how the same classification machinery can be applied consistently across events and wavelengths. Population-level claims about the frequency of each class are therefore outside the scope of this paper.
+
+\section{Framework and Methodology}
+\subsection{General form}
+We model a band-limited luminosity or flux proxy as
+\begin{equation}
+F(t,\lambda)=A(t-t_0)^{-5/3}+F_{\rm extra}(t,\lambda),
+\label{eq:general}
+\end{equation}
+where $A(t-t_0)^{-5/3}$ represents the canonical fallback component and $F_{\rm extra}(t,\lambda)$ represents additional emission beyond fallback in the observed band. All quantities fitted in this work are treated as band-limited fluxes or flux proxies, not bolometric luminosities. The model is proportional to luminosity up to an overall distance-dependent scaling factor. Therefore $F(t)$ is used throughout the fitting framework, while $L(t)$ is reserved for physical luminosity interpretations when explicitly stated.
+
+We note that the PEF--TDE framework can also be expressed in a more general, band-dependent form as
+\begin{equation}
+F(t,\lambda)=F_{\rm fb}(t,\lambda)+F_{\rm diss}(t,\lambda)+F_{\rm pers}(t,\lambda),
+\label{eq:general_decomposition}
+\end{equation}
+where the three terms represent fallback-like emission, a time-dependent empirical excess, and persistent band-limited emission, respectively. In the present work, we adopt a minimal parameterization in which these components are written as
+\begin{equation}
+F(t,\lambda)=A_\lambda (t-t_0)^{-5/3}
++B_\lambda \exp\left[-\frac{t-t_{p,\lambda}}{\tau_\lambda}\right]
++F_{{\rm floor},\lambda}.
+\label{eq:band_dependent_model}
+\end{equation}
+The parameters are allowed to vary with wavelength, reflecting the fact that different photometric bands may probe distinct emission regions or physical conditions. However, no explicit wavelength dependence is modeled in this work.
+
+
+\subsection{Model components}
+We compare three minimal model classes.
+
+\paragraph{Standard fallback model.}
+\begin{equation}
+F(t)=A(t-t_0)^{-5/3}.
+\label{eq:standard}
+\end{equation}
+
+\paragraph{Floor model.}
+\begin{equation}
+F(t)=F_{\rm floor}+A(t-t_0)^{-5/3}.
+\label{eq:floor}
+\end{equation}
+The floor component is not part of the canonical fallback theory. It is a phenomenological extension used to describe persistent or slowly varying emission observed in some TDE light curves.
+
+\paragraph{Exponential model.}
+\begin{equation}
+F(t)=A(t-t_0)^{-5/3}+B\exp\left[-\frac{t-t_p}{\tau}\right].
+\label{eq:expmodel}
+\end{equation}
+Here $B$ is the amplitude of the additional component, $t_p$ is the onset time of the exponential component, and $\tau$ is its characteristic decay timescale. Here $t_0$ represents the reference time of the fallback component (e.g., disruption time, peak time, or a fitted temporal offset depending on the dataset), while $t_p$ denotes the onset of the exponential component.
+
+The parameter $A$ is part of the standard fallback parameterization and is not introduced in this work. The primary extension introduced here is the systematic application of the exponential component, characterized by $B$, $t_p$, and $\tau$, within a unified model-comparison framework.
+
+\subsection{Empirical form of the exponential component}
+The exponential term is used as a compact empirical parameterization of a time-dependent excess. Mathematically, it corresponds to the assumption that the additional band-limited flux or flux-proxy component decreases proportionally to its instantaneous value:
+\begin{equation}
+\frac{dF_{\rm extra}}{dt}=-\frac{1}{\tau}F_{\rm extra}.
+\label{eq:dissipative}
+\end{equation}
+Separating variables gives
+\begin{equation}
+\frac{dF_{\rm extra}}{F_{\rm extra}}=-\frac{dt}{\tau}.
+\end{equation}
+Integrating,
+\begin{equation}
+\ln F_{\rm extra}=-\frac{t}{\tau}+C,
+\end{equation}
+which yields
+\begin{equation}
+F_{\rm extra}(t)=B\exp\left(-\frac{t}{\tau}\right).
+\end{equation}
+If the additional emission begins at a characteristic time $t_p$ rather than at $t=0$, the form becomes
+\begin{equation}
+F_{\rm extra}(t)=B\exp\left[-\frac{t-t_p}{\tau}\right].
+\label{eq:extraexp}
+\end{equation}
+Thus the exponential component represents an empirical description of a time-dependent excess component.
+
+The parameters $t_p$ and $\tau$ play distinct roles. The onset time $t_p$ indicates when the additional component becomes relevant, while $\tau$ controls how rapidly that component decays after onset. The evolution is governed by the dimensionless ratio $(t-t_p)/\tau$. For $t-t_p\ll\tau$, the exponential term changes slowly and may appear approximately constant over the observing window; for $t-t_p\sim\tau$, the decay becomes significant; and for $t-t_p\gg\tau$, the contribution becomes small. Importantly, $\tau$ is not the total duration of the event or the observing window. In this work it is treated only as an effective phenomenological timescale for the fitted excess component. It should not be interpreted as a direct measurement of a viscous, diffusion, cooling, or accretion timescale without additional physical modeling.
+
+
+\subsection{Asymptotic behavior of the model components}
+The three minimal components have distinct late-time behavior. The standard fallback model,
+\begin{equation}
+F_{\rm std}(t)=A(t-t_0)^{-5/3},
+\end{equation}
+approaches zero only asymptotically, so the fitted flux proxy remains positive at finite times even if it becomes observationally undetectable. The floor model,
+\begin{equation}
+F_{\rm floor,model}(t)=F_{\rm floor}+A(t-t_0)^{-5/3},
+\end{equation}
+approaches the constant band-limited level $F_{\rm floor}$, representing persistent emission in the observed band. The exponential model,
+\begin{equation}
+F_{\rm exp}(t)=A(t-t_0)^{-5/3}+B e^{-(t-t_p)/\tau},
+\end{equation}
+contains a transient term that decays faster than the fallback power law and is therefore most relevant at intermediate times. This asymptotic distinction is useful observationally: a late-time plateau favors a floor-like component, while a time-dependent excess that fades relative to fallback favors an exponential-family component.
+
+\subsection{Minimality and model selection}
+While a wide range of mathematical functions could be used to fit light curves, the PEF--TDE framework deliberately restricts the model space to a small set of interpretable components. This choice balances flexibility with physical meaning. Higher-order polynomials, splines, or other highly flexible functions could reduce residuals, but would generally not provide meaningful quantities such as a characteristic decay timescale or a finite energy proxy.
+
+Models are fitted independently for each event and band, and compared using $\chi^2$, reduced $\chi^2$, AIC, and BIC. No sequential selection is imposed: the standard, floor, and exponential models are compared in parallel within the same statistical framework. This approach reduces methodological bias and ensures that the preferred model is determined by statistical evidence and residual structure rather than by a predefined hierarchy.
+
+The choice of components in the PEF--TDE framework is not unique. Rather, it is motivated by a balance between minimality, interpretability, and the ability to capture the dominant observed deviations from canonical fallback. Alternative functional forms could be considered, but may introduce additional complexity without providing comparable physical insight.
+
+
+\subsection{Predictive scope}
+The framework is diagnostic rather than predictive in its present form. Model selection is performed \textit{a posteriori}, after observed light curves are available. It does not yet predict from initial physical conditions which component will dominate. However, by classifying events and extracting quantities such as $\tau$, $B$, and $F_{\rm floor}$, the framework establishes a basis for future predictive extensions once correlations with physical parameters are established.
+
+\section{Data and Observations}
+The observational data analyzed in this work consist of time-resolved photometric measurements of tidal disruption event (TDE) candidates identified as astronomical transients (ATs). An AT designation refers to a transient astrophysical event, not to a direct measurement of a single star. In the TDE context, the observed emission traces radiation produced by disrupted stellar material interacting with the black-hole environment.
+
+The framework is applied to a small proof-of-concept sample of TDEs: AT2018hyz, AT2019qiz, AT2020wey, AT2020zso, AT2020yue, and AT2020ysg. The events are not intended to form a statistically complete population sample. Instead, they are designed to illustrate the range of phenomenological behaviors that can be captured within the PEF--TDE framework.
+
+\subsection{Photometric measurements}
+For each transient event, the data consist of discrete measurements of the form
+\begin{equation}
+(t_i,F_i,\sigma_i),
+\end{equation}
+where $t_i$ is the observation time, $F_i$ is the observed flux or flux proxy in a given photometric band, and $\sigma_i$ is the associated observational uncertainty. In cases where data are provided in magnitude units, they must be converted to flux before applying the model fitting.
+
+Only bands with sufficient positive-flux photometric data are used. Each band is fitted independently. This is important because the preferred component may vary with wavelength.
+
+The inferred classification may depend on the temporal coverage of the light curve. In particular, limited late-time data may obscure the presence of a floor component, while limited early-time data may affect constraints on the exponential component. The results should therefore be interpreted within the context of the available observational window.
+
+
+\subsection{Flux and luminosity}
+The quantities analyzed in this draft correspond to observed fluxes or band-limited luminosity proxies rather than fully calibrated bolometric luminosities. The relationship between flux and luminosity is
+\begin{equation}
+L = 4\pi d^2 F,
+\end{equation}
+where $d$ is the luminosity distance to the host galaxy. Since the primary goal is to compare the temporal evolution of different phenomenological models, the fits are performed in the same band-limited units used by the input light curves. This preserves relative model comparisons, but derived energy quantities should be interpreted as proxies unless bolometric calibration is applied.
+
+\subsection{Physical origin of the measured emission}
+The measured flux does not correspond to direct emission from the original star itself. Instead, it traces radiation generated by the disrupted stellar debris and its interaction with the black-hole environment. The observed signal may include contributions from accretion, shock heating and circularization, reprocessing of high-energy radiation by surrounding material, outflows, and optically thick envelopes.
+
+Thus, the light curves represent the time evolution of a complex, multi-component system rather than a single physical process.
+
+\subsection{Wavelength dependence}
+The observations are obtained in different photometric bands. Different wavelengths may probe different temperatures, radii, optical depths, or reprocessing efficiencies. As a result, the same event may appear exponential-dominated in one band and floor-dominated or fallback-dominated in another. This band dependence is a central motivation for applying the framework independently to each wavelength band.
+
+
+\section{Fitting Procedure}
+\subsection{Model fitting}
+To quantitatively compare the proposed phenomenological models, we perform weighted non-linear least-squares fits to the observed light-curve data. For each event and band, the fitted data consist of $(t_i,F_i,\sigma_i)$, where $F_i$ is the observed flux and $\sigma_i$ is the corresponding uncertainty.
+
+For the exponential case, the fitted model is
+\begin{equation}
+F_{\rm model}(t)=A(t-t_0)^{-5/3}+B\exp\left[-\frac{t-t_p}{\tau}\right],
+\end{equation}
+The corresponding floor model used in the fits is
+\begin{equation}
+F_{\rm floor}(t)=F_{\rm floor}+A(t-t_0)^{-5/3}.
+\end{equation}
+The standard model is recovered by setting the additional component to zero. The parameters $A$, $B$, $\tau$, $t_0$, and $t_p$ are inferred from the fit when applicable. In practice, $t_0$ and $t_p$ may be fixed or constrained relative to the observed peak or discovery epoch to reduce degeneracies.
+
+The parameters $t_0$ and $t_p$ represent reference times for the fallback and exponential components, respectively. In practice, these parameters may be fixed relative to the observed peak or treated as free parameters within constrained ranges to reduce degeneracy. Their treatment is chosen to balance flexibility with stability of the fit.
+
+
+\subsection{Objective function}
+The fitting is performed by minimizing the chi-squared statistic
+\begin{equation}
+\chi^2=\sum_i \left[\frac{F_i-F_{\rm model}(t_i)}{\sigma_i}\right]^2.
+\end{equation}
+This weighting accounts for observational uncertainties and gives greater weight to higher-quality measurements.
+
+\subsection{Optimization method}
+The minimization uses standard non-linear least-squares methods, such as the Levenberg--Marquardt algorithm or equivalent bounded least-squares optimizers. Initial parameter guesses are chosen from the observed peak flux, late-time flux level, and characteristic decay timescales. Fit stability is assessed by checking the residual structure and, where possible, the robustness of the solution to reasonable changes in initial guesses.
+
+
+\subsection{Model selection procedure}
+All candidate models are fitted independently to the data for each event and photometric band. Model comparison is performed using AIC, the finite-sample corrected AICc, and BIC. No sequential preference is imposed a priori: the standard, floor, exponential, and expanded robustness models are compared in parallel within the same statistical framework.
+
+The preferred class is defined as the model family with the lowest AICc in the final finite-sample robustness comparison, with AIC and BIC reported as consistency checks. When two models differ by $\Delta {\rm AICc}<2$, they are treated as statistically indistinguishable, and the classification is reported conservatively. Values of $\Delta {\rm AICc}\gtrsim10$ or $\Delta {\rm BIC}\gtrsim10$ are interpreted as strong evidence against the higher-criterion model. This convention prevents small numerical differences from being overinterpreted as distinct observational classes.
+
+\subsection{Model comparison}
+The number of data points used in each fit after filtering and quality cuts is reported in Table~\ref{tab:summary}.
+
+We compare the standard, floor, and exponential models using the Akaike Information Criterion,
+\begin{equation}
+{\rm AIC}=\chi^2+2k,
+\end{equation}
+where $k$ is the number of free parameters. Because some bands contain relatively small numbers of data points, we also compute the finite-sample corrected criterion
+\begin{equation}
+{\rm AICc}={\rm AIC}+\frac{2k(k+1)}{N-k-1}.
+\end{equation}
+As a complementary robustness check, we compute the Bayesian Information Criterion,
+\begin{equation}
+{\rm BIC}=\chi^2+k\ln N,
+\end{equation}
+where $N$ is the number of data points in the fitted band. Relative model preference is quantified by
+\begin{equation}
+\Delta {\rm AICc}={\rm AICc}_{\rm model}-{\rm AICc}_{\rm best}, \qquad
+\Delta {\rm BIC}={\rm BIC}_{\rm model}-{\rm BIC}_{\rm best}.
+\end{equation}
+Residual structure is also inspected to assess whether statistical improvement corresponds to an improved representation of the observed light-curve shape. The residual diagnostics are not used to claim that the minimal models fully describe the data; rather, they test whether the comparison is statistically usable after pathological fits are excluded. In the final robustness analysis we additionally compare against a broken power-law and a stretched-exponential alternative to test whether the PEF components are preferred over other simple phenomenological forms.
+
+\subsection{Uncertainty estimation}
+Parameter uncertainties, including those on $\tau$, may be estimated from the covariance matrix of the fit. These uncertainties represent local approximations to the parameter confidence intervals and should be interpreted cautiously when parameters are correlated or when the data do not strongly constrain a component. Several expanded-model fits converge near imposed parameter boundaries (for example very long $\tau$ values), indicating that some phenomenological parameters are weakly constrained by the present data quality and temporal coverage. Such boundary values are retained as diagnostics of model behavior but are not interpreted as precise physical measurements.
+
+\subsection{Parameter degeneracy and pathological-fit filtering}
+The fitted models contain correlated parameters, especially $A$--$t_0$, $B$--$\tau$, and $t_p$--$\tau$ in cases where the beginning or end of the excess component is poorly sampled. We therefore do not interpret all fitted parameters as physically measured quantities. Fits are flagged as pathological for residual-distribution diagnostics if they show optimizer failure, non-finite covariance, absurd formal parameter uncertainty, an exponential or stretched-exponential timescale hitting the imposed upper bound, non-finite residuals, near-zero uncertainty normalization, or RMS/max normalized residuals exceeding $10^4$.
+
+Timescale values that hit a fitting boundary are treated as unconstrained upper-bound solutions rather than physical measurements. A full posterior exploration of degeneracies with MCMC is deferred to future work because the present paper is focused on classification of light-curve morphology rather than precision parameter inference.
+
+\section{Results}
+\subsection{Exponential-dominated case: AT2018hyz}
+AT2018hyz provides a clear example where the exponential model is strongly preferred over both the standard fallback and floor models. The exponential component captures a time-dependent excess that cannot be reproduced by either fallback alone or a constant offset.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{fig1_at2018hyz_final.pdf}
+\caption{AT2018hyz g-band model comparison. This behavior indicates the presence of a time-dependent phenomenological excess beyond canonical fallback. The standard fallback and floor models fail to reproduce the full light-curve evolution, while the exponential model provides the strongest fit and reduces systematic residual structure. The information-criterion comparison strongly favours the exponential component.}
+\label{fig:hyz}
+\end{figure}
+
+\subsection{Floor-dominated case: AT2020zso}
+AT2020zso provides a contrasting case. In the g-band, the standard fallback model underpredicts late-time emission, while the floor model captures the observed plateau. The exponential component is not preferred in this band.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{fig2_at2020zso_final.pdf}
+\caption{AT2020zso g-band model comparison. The late-time excess indicates persistent emission beyond canonical fallback. The standard fallback model underpredicts late-time emission, while the floor model captures the observed plateau. The exponential model is not preferred in this band.}
+\label{fig:zso}
+\end{figure}
+
+\subsection{Phenomenological classification}
+The sample can be grouped into several phenomenological categories: standard-dominated, floor-dominated, exponential-dominated, and mixed or wavelength-dependent cases.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{classification_matrix_final.png}
+\caption{Final band-by-band phenomenological classification matrix for the TDE sample. Each cell indicates the preferred model family for a given event and photometric band in the expanded validation analysis. Gray cells marked N/A indicate bands not analyzed or not available in the cleaned validation set. The matrix shows that the same observational framework can produce standard fallback, floor-dominated, and time-dependent time-dependent regimes depending on event and wavelength coverage.}
+\label{fig:band_classification_matrix}
+\end{figure}
+
+\subsection{Wavelength-dependent phenomenological behavior}
+The preferred phenomenological component varies with wavelength for several events. Some systems exhibit optical bands favoring time-dependent exponential or stretched-exponential behavior while infrared or ultraviolet bands are better described by persistent floor-like emission or other limiting regimes. This does not imply that different bands require unrelated physical models. Rather, it indicates that different wavelength ranges can be dominated by different observational components within the same PEF--TDE decomposition.
+
+This behavior may reflect the fact that different photometric bands probe distinct temperatures, radii, optical depths, or reprocessing efficiencies in the evolving TDE environment. The extracted exponential timescale $\tau$ should therefore be interpreted as a phenomenological observable associated with the additional time-dependent component, not as a unique measurement of a single physical process.
+
+\subsection{Summary of model selection}
+Table~\ref{tab:summary} summarizes the main classifications and representative model-selection results.
+
+
+\begin{table}[H]
+\centering
+\scriptsize
+\begin{tabular}{llllllll}
+\toprule
+Event & Band & Best model & AIC & $\Delta$AIC & $\tau$ (days) & $N$ & Notes \\
+\midrule
+AT2018hyz & g & Exponential & 1505.34 & $\gg100$ vs standard & $80.8\pm2.2$ & 79 & Strong exponential component \\
+AT2020zso & g & Floor & $\sim3812$ & $\sim193$ vs standard & --- & 162 & Late-time plateau \\
+AT2019qiz & g & Exponential & 8501.09 & 2116.60 vs standard & $61.8\pm1.8$ & 55 & Exponential in all bands \\
+AT2019qiz & r & Exponential & 10074.36 & 2188.83 vs standard & $67.3\pm2.0$ & 61 & Exponential in all bands \\
+AT2019qiz & i & Exponential & 1659.36 & 792.06 vs standard & $50.1\pm1.7$ & 29 & Exponential in all bands \\
+AT2020wey & g & Standard & --- & --- & --- & 428 & Consistent with fallback \\
+AT2020wey & r & Standard & --- & --- & --- & 433 & Consistent with fallback \\
+AT2020yue & g & Floor & --- & --- & --- & 168 & Persistent emission \\
+AT2020yue & r & Floor & --- & --- & --- & 230 & Persistent emission \\
+AT2020ysg & g & Floor & --- & --- & --- & 327 & Persistent emission \\
+\bottomrule
+\end{tabular}
+\caption{Summary of phenomenological classifications and model selection across the TDE sample. $\Delta$AIC values indicate preference relative to the standard fallback model. $N$ denotes the number of photometric data points used in each fit after filtering and quality cuts. Dash symbols indicate cases where the parameter is not applicable or was not available in the summarized table; for exponential cases, $\tau$ exists as a fitted parameter even when not tabulated in this summary.}
+\label{tab:summary}
+\end{table}
+
+
+\subsection{Case study: AT2019qiz}
+We apply the PEF--TDE framework to AT2019qiz across the $g$, $r$, and $i$ photometric bands. Each band is fitted independently using the standard, floor, and exponential models. Model selection is again performed using AICc with AIC and BIC as consistency checks, with no sequential preference imposed between candidate models.
+
+Within the core three-component PEF comparison, all three bands strongly favor the exponential model over the standard fallback and floor alternatives. The AIC values for the exponential model are 8501.09 in the $g$ band, 10074.36 in the $r$ band, and 1659.36 in the $i$ band. In each case the exponential model improves strongly over the standard and floor alternatives, with $\Delta {\rm AICc}\gg10$.
+
+This consistency across wavelength implies that AT2019qiz is not classified as a mixed event in the present core analysis. Instead, it is an exponential-dominated event across the optical bands considered here. In the expanded five-model robustness comparison, a stretched-exponential alternative can provide an even lower information criterion. This does not contradict the PEF interpretation; rather, it suggests that the time-dependent excess belongs to the same broader family of transient time-dependent components, with the pure exponential representing the minimal limiting form. The optical bands therefore consistently support a time-dependent time-dependent component rather than a purely standard or floor-dominated evolution.
+
+This behavior contrasts with wavelength-dependent mixed cases, where different photometric bands favor distinct phenomenological components. In AT2019qiz, different wavelengths do not appear to select different model classes; rather, they consistently support an exponential component.
+
+
+The individual $g$, $r$, and $i$ band fit panels for AT2019qiz are provided in Appendix~\ref{app:qizfits}. They are not required to define the classification, but they document the band-level residual behavior underlying the exponential-dominated core result.
+
+
+\subsection{Wavelength-dependent mixed behavior}
+The classification into standard-, floor-, and exponential-dominated events reflects the dominant observed behavior rather than mutually exclusive physical regimes. Different physical processes may coexist, even when one component dominates the observed light curve. Mixed classification refers to cases where different photometric bands favor different phenomenological models. Mixed or wavelength-dependent classifications do not imply unrelated models. Instead, they indicate different dominant components within the same phenomenological framework. The model in Eq.~\ref{eq:general} naturally allows different regimes across wavelength: in some bands the exponential component dominates, while in others the additional component appears floor-like or is absent. This suggests that different bands may probe different emission regions, temperatures, optical depths, or reprocessing efficiencies. The band-by-band classification matrix in Fig.~\ref{fig:band_classification_matrix} summarizes this behavior across the available sample and wavelength coverage. The AT2019qiz case study above illustrates the complementary situation: when all analyzed bands favor the same component, the event is classified according to that common dominant behavior rather than as mixed.
+
+\subsection{Magnitude of deviations from fallback}
+The framework also quantifies the deviation from canonical fallback. For a PEF model,
+\begin{equation}
+\Delta F(t)=F_{\rm PEF}(t)-F_{\rm std}(t)=F_{\rm extra}(t).
+\end{equation}
+For a floor-dominated event,
+\begin{equation}
+\Delta F\approx F_{\rm floor},
+\end{equation}
+while for an exponential component,
+\begin{equation}
+\Delta F(t)=B\exp\left[-\frac{t-t_p}{\tau}\right].
+\end{equation}
+Thus the additional term directly measures the non-fallback contribution required by the data.
+
+\subsection{Robustness against alternative phenomenological models}
+\label{subsec:robustness_results}
+We tested the robustness of the PEF--TDE classifications by comparing the standard fallback, floor, and exponential models against two additional phenomenological alternatives: a broken power law and a stretched exponential. This expanded comparison is not intended to assign a unique physical mechanism to every preferred functional form. Instead, it tests whether the light curves require structure beyond a pure $t^{-5/3}$ fallback decline and whether the preferred classifications remain stable under stronger statistical penalties.
+
+Figures~\ref{fig:delta_aic} and~\ref{fig:delta_bic} show the resulting information-criterion differences relative to the best model in each event and band. The final figures show the full dynamic range using a symmetric logarithmic visualization rather than clipping the largest values. Extremely large information-criterion differences arise when a model fails catastrophically relative to the preferred solution; these values indicate overwhelming statistical disfavour rather than physically meaningful quantitative differences. The scientific conclusions depend primarily on model ranking and consistency across bands rather than on the absolute magnitude of the largest outlier values.
+
+The broad agreement between AIC and BIC indicates that the main classifications are not driven solely by the additional number of free parameters. The stretched-exponential model is sometimes preferred over the pure exponential model, particularly in bands where the decay is not described by a single exponential timescale. We interpret such cases as support for a time-dependent excess rather than as evidence for a unique exponential law.
+
+Several expanded-model fits converge near imposed parameter boundaries, most commonly at very long decay timescales. These cases indicate weak constraints on the detailed functional form rather than a direct physical measurement of an extremely long timescale. The classification therefore emphasizes model family and residual behavior, not the literal interpretation of every fitted boundary parameter.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{delta_aic_final.png}
+\caption{Multi-model comparison using $\Delta$AIC relative to the best model in each event and band. The full dynamic range is shown using a symmetric logarithmic scale for readability. Extremely large values occur when statistically disfavored models fail catastrophically relative to the preferred solution and should be interpreted as overwhelming statistical disfavour rather than physically meaningful quantitative separations.}
+\label{fig:delta_aic}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{delta_bic_final.png}
+\caption{Multi-model comparison using $\Delta$BIC relative to the best model in each event and band. The full dynamic range is shown using a symmetric logarithmic scale. The similarity between the AIC and BIC trends indicates that the main phenomenological classifications are not simply artifacts of over-parameterization.}
+\label{fig:delta_bic}
+\end{figure}
+
+The fitted exponential timescales are summarized as a function of effective wavelength in Figure~\ref{fig:tau_wavelength}. The parameter $\tau$ represents a phenomenological decay timescale associated with the additional exponential emission component. Boundary values or poorly constrained uncertainties are treated cautiously and are not used as definitive evidence for a unique physical mechanism.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{tau_vs_wavelength_final.png}
+\caption{Wavelength dependence of the phenomenological exponential timescale $\tau$ for bands in which an exponential component is measured. Points show independent band-level fits; different markers denote different TDEs. The shaded regions indicate approximate UV and optical wavelength ranges. No lines are drawn between different events, emphasizing that the comparison is phenomenological rather than a single universal scaling relation.}
+\label{fig:tau_wavelength}
+\end{figure}
+
+Residual diagnostics provide an additional check on the model-selection results. Normalized residuals were computed using the same cleaned photometric data used in the fits. The final residual comparison uses only valid residual estimates and excludes only non-finite values, near-zero uncertainty normalizations, or pathological cases with RMS/max residual $>10^4$. The cleaned residual set contains no NaN or infinite values.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{residual_comparison_final.png}
+\caption{Residual comparison using valid fits after excluding only failed or pathological residual estimates: non-finite residuals, near-zero uncertainty normalizations, or RMS/max residual $>10^4$. The diagnostic confirms that the model comparisons are not dominated by numerical outliers or failed residual normalizations.}
+\label{fig:residualclean}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.80\linewidth]{normalized_residuals_histogram.png}
+\caption{Histogram of normalized residuals for preferred statistically valid fits retained after pathological-fit filtering. The red curve shows a unit Gaussian reference distribution. The distribution is centered near zero and approximately Gaussian in its core, but it is used only as a diagnostic of the comparative fitting procedure rather than as proof that the minimal models fully capture all temporal structure.}
+\label{fig:residual_histogram}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.72\linewidth]{normalized_residuals_qqplot.png}
+\caption{Q--Q diagnostic for normalized residuals from preferred statistically valid fits. The central 99\% of the residual distribution is shown to avoid domination by a small number of extreme points. The approximate alignment with the Gaussian reference line supports the use of likelihood-based information criteria as comparative diagnostics after pathological-fit filtering, while deviations from the line indicate remaining non-Gaussian structure.}
+\label{fig:residual_qq}
+\end{figure}
+
+These tests do not prove a unique physical origin for any component. They show that the PEF--TDE classifications are statistically robust phenomenological summaries of light-curve morphology, and that additional time-dependent or persistent structure is often required beyond canonical fallback.
+
+\section{Discussion}
+
+The PEF--TDE framework is best understood as an empirical diagnostic tool. It does not aim to identify unique physical mechanisms or to replace first-principles TDE models. Instead, it provides a minimal and reproducible description of observed light-curve morphology relative to canonical fallback.
+
+In this interpretation, fallback may remain physically present even when it does not dominate the observed band-limited flux. A fitted floor or exponential-family term should therefore be read as an observational descriptor of excess structure, not as proof of a distinct emission mechanism. The components are useful for classification and comparison, but they are not mutually exclusive physical regimes.
+
+The expanded classification matrix shows that some events exhibit wavelength-dependent phenomenological classifications, with optical bands favoring time-dependent exponential-family components while infrared or ultraviolet bands can be better described by persistent floor-like emission or fallback-dominated behavior. This pattern is interpreted as evidence that different bands may be dominated by distinct emitting regions or reprocessing structures, not as evidence for mutually exclusive physical regimes.
+
+\subsection{Phenomenological interpretation of the exponential-family timescale}
+The exponential-family term is an empirical descriptor of a time-dependent excess relative to canonical fallback. The differential equation used to motivate the exponential form is not a first-principles derivation of TDE accretion physics; it is a compact way to parameterize a component whose fitted contribution decreases over an effective timescale. Accordingly, $\tau$ is treated here as an observational summary statistic, not as a unique measurement of a viscous, diffusion, cooling, or relaxation time.
+
+This distinction is essential for interpreting the results. A well-constrained $\tau$ may provide a useful comparative measure of how rapidly the excess component fades in a given band, but it does not by itself identify the physical origin of that excess. Conversely, fits in which $\tau$ reaches the imposed upper bound or has poorly constrained uncertainty are classified as unconstrained and are not used to infer physical timescales. The value of the framework lies in identifying which event-band combinations require time-dependent excess structure beyond fallback, thereby guiding future models that can include physically predictive timescale calculations.
+
+\subsection{Phenomenological interpretation of the floor component}
+The floor component introduced in this work represents a persistent luminosity contribution that does not decay on the same timescale as the canonical fallback component.
+
+By definition, luminosity corresponds to the rate of energy emission,
+\begin{equation}
+L(t) = \frac{dE}{dt},
+\end{equation}
+and therefore the presence of a non-zero floor implies that the system continues to radiate energy at late times. This emission is primarily observed in the form of photons in the measured wavelength band.
+
+The persistence of this component indicates that the observed luminosity is not solely governed by the fallback rate. Instead, it suggests the presence of additional physical processes capable of sustaining emission over extended timescales.
+
+Several mechanisms proposed in the literature may contribute to this behavior:
+\begin{itemize}
+    \item \textbf{Residual accretion disk emission:} Even after the peak fallback phase, material may continue to accrete at a reduced rate, providing a steady energy source \citep{metzger2016,auchettl2017}.
+
+    \item \textbf{Reprocessing of radiation:} High-energy emission from the inner regions may be absorbed and re-emitted by surrounding material, producing a flatter, longer-lived light curve \citep{guillochon2014,roth2016}.
+
+    \item \textbf{Optically thick envelopes or outflows:} Radiation can be trapped and released over longer timescales, effectively smoothing the decay and generating a persistent luminosity component \citep{metzger2016}.
+\end{itemize}
+These scenarios are not mutually exclusive, and the floor component should be interpreted as a phenomenological signature of sustained emission rather than a uniquely identified physical process.
+
+Importantly, this component does not represent stored energy or accumulated particles, but rather a continuous release of energy over time. As such, it provides evidence for additional energy channels beyond the standard fallback-driven emission.
+
+\subsection{Practical use of floor and exponential components}
+In practical applications, the floor and exponential components play complementary roles. The floor component is the simplest correction for persistent or slowly varying emission. It is often the first extension considered when a late-time plateau is present. The exponential component is more informative but more demanding: it introduces an additional timescale and is most useful when residuals show time-dependent structure that cannot be captured by a constant offset.
+
+Thus, the floor may be viewed as a limiting or approximate case of slowly varying emission, while the exponential term provides a more detailed description when the data support a finite decay timescale.
+
+\subsection{Energy interpretation}
+For exponential components, the integrated contribution is approximated by
+\begin{equation}
+E_{\rm extra}\sim B\tau.
+\end{equation}
+For floor-dominated cases, the corresponding finite-window proxy is
+\begin{equation}
+E_{\rm floor,proxy}\sim F_{\rm floor}\Delta t_{\rm obs}.
+\end{equation}
+These quantities are relative energy proxies in band-limited flux units and should not be interpreted as bolometric energies without calibration.
+
+\subsection{Model limitations}
+The framework is most effective for well-sampled light curves with sufficient temporal coverage to distinguish between competing components. The main limitations are that the model is phenomenological, the analysis is based on band-limited fluxes rather than bolometric luminosities, and the present sample is not population-complete. Some fitted parameters, especially in expanded alternatives, are weakly constrained or boundary-limited. These limitations do not invalidate the classification framework, but they require that phenomenological interpretations remain cautious and that population-level claims await larger samples.
+
+\subsection{Toward predictive modeling}
+The framework is not predictive \textit{a priori}, but it can become a foundation for predictive modeling if future work establishes correlations between phenomenological classes and physical parameters such as black hole mass, accretion rate, optical depth, viewing angle, or reprocessing efficiency.
+
+\section{Scope and Limitations}
+The PEF--TDE framework is an exploratory phenomenological classification scheme. It is not a population-complete study of TDE behavior, and the six-event sample used here should be interpreted as a proof-of-concept set rather than a statistically representative sample. The classifications are therefore statements about the analyzed event-band combinations, not about the population frequency of each class.
+
+The model components are also not unique physical mechanisms. The floor term identifies persistent band-limited emission relative to the fitted fallback component, while the exponential-family term identifies a time-dependent empirical excess. Neither term uniquely specifies an emission site, transport process, or accretion regime. The framework is designed to organize observational morphology and to flag where additional structure is needed beyond canonical fallback.
+
+Parameter degeneracies remain important. In particular, $t_0$ and $A$, $B$ and $\tau$, and $t_p$ and $\tau$ can be correlated when the temporal baseline is limited. Boundary solutions and fits with pathological uncertainties are therefore treated as unconstrained diagnostics rather than physical measurements. Future work should combine larger, selection-defined samples with posterior sampling, explicit noise models, public machine-readable data products, and physically predictive models that can test whether the empirical classes map onto accretion, reprocessing, cooling, or diffusion scenarios.
+
+\section{Conclusions}
+We introduced the PEF--TDE framework, a phenomenological extension of the canonical fallback model for TDE light curves. The framework compares standard fallback, floor-like emission, and exponential additional emission within a unified model-selection scheme.
+
+The main conclusions are:
+\begin{enumerate}[label=(\roman*)]
+\item The canonical fallback model is a necessary baseline but does not describe all observed TDE light curves.
+\item Additional emission can be floor-like, exponential, wavelength-dependent, or absent.
+\item The exponential component is motivated by a simple dissipative equation and introduces a phenomenological timescale $\tau$, which should not be interpreted as a unique physical mechanism without additional modeling.
+\item The floor component represents sustained emission in the observed band, not stored energy or accumulated particles.
+\item The floor and exponential models are complementary: the floor is a robust first correction, while the exponential captures time-dependent extra emission when supported by the data.
+\item The framework is diagnostic rather than predictive in its current form, but its classifications are supported by AIC/BIC comparisons, residual diagnostics, and tests against alternative phenomenological models.
+\end{enumerate}
+
+We emphasize that the classification introduced here reflects dominant observational behavior rather than mutually exclusive physical regimes. The diversity of observed TDE light curves can therefore be understood as variations in the relative contribution of these minimal phenomenological components. These results suggest that a minimal phenomenological decomposition can capture the diversity of observed TDE light curves while providing a structured pathway toward future physically predictive models.
+
+Future work will explore whether the inferred exponential timescale $\tau$ can be systematically related to physical scales such as viscous or diffusion times, and whether such relations hold across larger samples and multiple wavelengths.
+
+\appendix
+\section{Derivative analysis}
+For the fitted exponential flux model,
+\begin{equation}
+F(t)=A(t-t_0)^{-5/3}+B\exp\left[-\frac{t-t_p}{\tau}\right],
+\end{equation}
+the derivative is
+\begin{equation}
+\frac{dF}{dt}=-\frac{5}{3}A(t-t_0)^{-8/3}-\frac{B}{\tau}\exp\left[-\frac{t-t_p}{\tau}\right].
+\end{equation}
+The first term describes the changing fallback contribution, while the second term describes the decay rate of the additional exponential component.
+
+\section{Energy proxies}
+The exponential contribution integrates approximately to
+\begin{equation}
+E_{\rm extra}\sim B\tau,
+\end{equation}
+while the floor contribution over a finite observing window is
+\begin{equation}
+E_{\rm floor,proxy}\sim F_{\rm floor}\Delta t_{\rm obs}.
+\end{equation}
+These are useful for relative comparisons but are not physical bolometric energies unless the light curves are calibrated accordingly.
+
+\section{Validation tables}
+The finite-sample and residual diagnostics are summarized below. The full machine-readable tables are provided as accompanying CSV files. In the AICc check, 27 event--band classifications were compared, and only two changed relative to the original AIC ranking. Both changes occur in the low-$N$ WISE bands of AT2020wey, where AIC selected a floor model but AICc selected the simpler standard model. This confirms that the main optical classifications are stable under the finite-sample correction.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{llll}
+\toprule
+Event & Band & AIC-selected class & AICc-selected class \\
+\midrule
+AT2020wey & W1 & Floor & Standard \\
+AT2020wey & W2 & Floor & Standard \\
+\bottomrule
+\end{tabular}
+\caption{Only two of 27 checked event--band classifications change when AIC is replaced by AICc. All other classifications remain unchanged.}
+\label{tab:aicc_changes_compact}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{ll}
+\toprule
+Diagnostic quantity & Result \\
+\midrule
+Event--band classifications checked & 27 \\
+AICc changes relative to AIC & 2 \\
+Valid normalized residuals used in distribution diagnostics & 60 \\
+Residual figures shown & histogram and Q--Q plot \\
+Autocorrelation diagnostics & Durbin--Watson and lag-1 correlation \\
+\bottomrule
+\end{tabular}
+\caption{Summary of the finite-sample and residual-distribution validation added in response to the statistical robustness concerns.}
+\label{tab:minimal_stats_summary}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{llll}
+\toprule
+Event & Band & Preferred valid model & Durbin--Watson \\
+\midrule
+AT2020wey & W1 & Standard & 0.817 \\
+AT2020wey & W2 & Standard & 1.703 \\
+AT2020yue & W1 & Floor & 1.406 \\
+AT2020zso & B & Standard & 2.092 \\
+AT2020zso & UVW2 & Stretched exponential & 1.535 \\
+\bottomrule
+\end{tabular}
+\caption{Representative Durbin--Watson diagnostics for preferred fits retained after official pathological-fit filtering. Values far from 2 indicate residual temporal correlation, showing that the minimal models are useful for classification but do not capture all temporal structure.}
+\label{tab:dw_compact}
+\end{table}
+
+Pathological-fit filtering flags optimizer failure, non-finite covariance, absurd formal parameter uncertainty, exponential-family timescale saturation at an imposed upper bound, non-finite residuals, near-zero uncertainty normalization, or RMS/max normalized residuals exceeding $10^4$. Fits flagged by these criteria are not used for residual-distribution diagnostics or physical interpretation of timescale values.
+
+\section{Residual validation notes}
+
+\section{Additional diagnostic figures}
+The diagnostic residual and information-criterion figures shown in the main text are intended as robustness checks rather than unique physical model identifications. Extremely large information-criterion values reflect failed or catastrophically disfavored fits and are not interpreted as physically meaningful scales.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.98\linewidth]{appendix_residual_plot_logscale.png}
+\caption{Appendix log-scale residual diagnostic showing the pathological cases used to define the residual-cleaning criteria. This figure is included only as a numerical diagnostic; it is not used to infer physical behavior.}
+\label{fig:residual_appendix}
+\end{figure}
+
+
+\section{AT2019qiz band-level fit diagnostics}
+\label{app:qizfits}
+The following panels document the individual $g$, $r$, and $i$ band fits for AT2019qiz. They support the core conclusion that the optical light curves require a time-dependent excess component, while the expanded model comparison places this behavior within a broader exponential-family class.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\linewidth]{AT2019qiz_g_model_comparison_final.png}
+\caption{AT2019qiz $g$-band model comparison.}
+\label{fig:qizg_app}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\linewidth]{AT2019qiz_r_model_comparison_final.png}
+\caption{AT2019qiz $r$-band model comparison.}
+\label{fig:qizr_app}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.88\linewidth]{AT2019qiz_i_model_comparison_final.png}
+\caption{AT2019qiz $i$-band model comparison.}
+\label{fig:qizi_app}
+\end{figure}
+
+\section{Model interpretation summary}
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+Component & Role & Interpretation \\
+\midrule
+Standard fallback & Baseline & Return of bound stellar debris \\
+Floor & First-order excess & Persistent or slowly evolving emission \\
+Exponential & Time-dependent excess & Empirical time-dependent excess with effective timescale $\tau$ \\
+\bottomrule
+\end{tabular}
+\caption{Interpretation of the components used in the PEF--TDE framework.}
+\end{table}
+
+\begin{thebibliography}{99}
+\bibitem[Rees(1988)]{rees1988} Rees, M. J. 1988, Nature, 333, 523.
+\bibitem[Phinney(1989)]{phinney1989} Phinney, E. S. 1989, in \textit{The Center of the Galaxy}.
+\bibitem[Gezari(2021)]{gezari2021} Gezari, S. 2021, Annual Review of Astronomy and Astrophysics, 59, 21.
+\bibitem[Metzger \& Stone(2016)]{metzger2016} Metzger, B. D., \& Stone, N. C. 2016, MNRAS, 461, 948.
+\bibitem[Auchettl et al.(2017)]{auchettl2017} Auchettl, K., Guillochon, J., \& Ramirez-Ruiz, E. 2017, ApJ, 838, 149.
+\bibitem[Guillochon et al.(2014)]{guillochon2014} Guillochon, J., Manukian, H., \& Ramirez-Ruiz, E. 2014, ApJ, 783, 23.
+\bibitem[Roth et al.(2016)]{roth2016} Roth, N., Kasen, D., Guillochon, J., \& Ramirez-Ruiz, E. 2016, ApJ, 827, 3.
+\end{thebibliography}
+
+\end{document}
