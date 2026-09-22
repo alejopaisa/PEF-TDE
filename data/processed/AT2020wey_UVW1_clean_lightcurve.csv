@@ -1,0 +1,12 @@
+event,band,time_original_mjd,time_days,flux,flux_err,flux_units,source_json,preprocessing
+AT2020wey,UVW1.uvot,59150.585493,0.0,0.00030467,1.6613e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59154.257648,3.6721550000002026,0.00026025,1.3431e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59158.047662,7.462168999998539,0.0002142,1.1697e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59162.684683,12.099190000000817,0.00011112,7.5997e-06,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59166.770691,16.185197999999218,6.2328e-05,6.0977e-06,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59180.605786,30.020293000001402,2.8832e-05,3.7562e-06,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59187.545302,36.95980899999995,2.8645e-05,5.4413e-06,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59197.057863,46.47237000000314,1.8547e-05,1.106e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,59201.676789,51.09129599999869,2.1352e-05,6.1701e-06,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,60539.21369,1388.6281969999982,1.7866e-06,6.7969e-06,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,UVW1.uvot,60543.159653,1392.5741600000038,1.7569e-05,1.0328e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0

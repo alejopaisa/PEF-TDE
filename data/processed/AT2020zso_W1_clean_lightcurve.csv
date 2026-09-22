@@ -1,0 +1,11 @@
+event,band,time_original_mjd,time_days,flux,flux_err,flux_units,source_json,preprocessing
+AT2020zso,W1.wise,56985.00447313,0.0,9.459591094916415e-06,1.3645842783225317e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,57168.507298690005,183.50282556000457,2.1704511656125126e-05,1.2373070999075571e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,57899.790070614996,914.7855974849954,4.0296375641543885e-06,1.4360522408464465e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,58427.269344375,1442.2648712450027,3.381511793415042e-05,1.105540691672803e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,58628.45391516,1643.4494420299961,7.01938536005508e-06,7.844031750182713e-06,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,59359.3580796,2374.353606470002,2.5068890880943636e-06,1.1139301258429648e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,59522.68014508,2537.675671949997,2.104761244773209e-05,1.1893433576178398e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,59726.44780367,2741.4433305400016,8.952161578699088e-07,1.0683540257538941e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,60090.55680993,3105.5523367999995,1.5508361353672826e-05,1.2267841430910523e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020zso,W1.wise,60454.79827351,3469.793800380001,2.4389724036606703e-06,1.3494314515529751e-05,catalog flux units,AT2020zso.json.txt,positive finite flux/error only; time shifted per band to min(time)=0

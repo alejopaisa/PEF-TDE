@@ -1,0 +1,17 @@
+event,band,time_original_mjd,time_days,flux,flux_err,flux_units,source_json,preprocessing
+AT2020ysg,W1.wise,56996.043039775,0.0,1.177280584382181e-05,7.887151606646827e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,57164.96826213,168.92522235499928,3.8426991166152853e-07,7.821781696866028e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,57360.473476015,364.43043623999984,2.0839809527646077e-07,6.37399488789074e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,57887.322096,891.2790562250011,2.2777439253359754e-06,7.775377826532684e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,58247.7792636,1251.736223824999,1.7926318422050882e-06,7.053705340480933e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,58612.00707845,1615.9640386749961,2.858996786266376e-06,7.564100385783743e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,58820.57345153,1824.5304117549967,1.704219640954667e-05,7.781223837556889e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,58978.85891881,1982.815879034999,8.889798276340334e-06,8.253219533579682e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,59185.03460178,2188.991562004994,2.269422346181555e-06,6.823139144214352e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,59343.15324826,2347.110208484999,1.8100714443406416e-05,7.532347801216541e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,59551.91681451,2555.873774734995,1.986334768738762e-05,8.519040623443206e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,59707.72296006,2711.6799202849943,3.964897921733704e-05,6.3424526269030554e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,59915.97587665,2919.9328368749993,2.877973509918075e-05,8.391563619132305e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,60074.525283075,3078.482243300001,5.339007828267483e-05,8.817676822161817e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,60280.28426009,3284.2412203149943,6.883152110377804e-05,1.0391149204362064e-05,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,W1.wise,60438.61998174,3442.576941964995,5.21963637496721e-05,7.329456356900575e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0

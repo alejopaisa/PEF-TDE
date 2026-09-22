@@ -1,0 +1,11 @@
+event,band,time_original_mjd,time_days,flux,flux_err,flux_units,source_json,preprocessing
+AT2020wey,W2.wise,56954.72054806,0.0,3.627883286047398e-06,1.6692631812895688e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,57122.145042865,167.42449480499636,3.436541401954901e-05,1.58510459435441e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,57481.170725485,526.4501774249948,5.410107464041694e-06,1.5479082506833077e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,57841.786494839995,887.0659467799924,1.9036841604746368e-07,1.4637387755420924e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,58047.741820844996,1093.021272784994,4.449831991192529e-06,1.7629338138338798e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,58202.922340185,1248.2017921250008,1.9757248878638822e-05,1.2523498175271231e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,58569.35777471,1614.6372266499966,4.553088747774015e-06,1.4931600026724013e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,59507.412653139996,2552.692105079994,1.8110749419950058e-05,1.5493357369228477e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,60029.019514975,3074.2989669149974,1.787780360747268e-05,1.3775386830409331e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020wey,W2.wise,60396.10768027,3441.387132209995,3.1256600002262875e-06,1.5734407982345507e-05,catalog flux units,AT2020wey.json.txt,positive finite flux/error only; time shifted per band to min(time)=0

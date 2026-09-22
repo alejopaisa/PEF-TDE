@@ -1,0 +1,4 @@
+event,band,time_original_mjd,time_days,flux,flux_err,flux_units,source_json,preprocessing
+AT2020ysg,U.uvot,59267.611653,0.0,8.4393e-05,1.0163e-05,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,U.uvot,59295.512212,27.900559000001522,6.1548e-05,9.3341e-06,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020ysg,U.uvot,59303.602764,35.991111000003,6.3672e-05,1.0255e-05,catalog flux units,AT2020ysg.json.txt,positive finite flux/error only; time shifted per band to min(time)=0

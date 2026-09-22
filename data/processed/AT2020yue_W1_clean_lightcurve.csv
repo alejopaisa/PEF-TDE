@@ -1,0 +1,11 @@
+event,band,time_original_mjd,time_days,flux,flux_err,flux_units,source_json,preprocessing
+AT2020yue,W1.wise,56803.40296148,0.0,2.7215571227134983e-05,8.523809488393627e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,57162.309004905,358.90604342499864,2.9786308598373285e-05,8.705191203102657e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,57521.563685785004,718.1607243050021,2.2158347544223276e-05,6.386662817964622e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,57884.63615678,1081.2331952999957,1.4292819757324555e-05,9.14615122318201e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,58609.32355965,1805.9205981699997,1.3142366730081152e-05,8.482582375868214e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,58976.4051173,2173.002155819995,2.4998811757452964e-05,8.469326845006915e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,59340.53721965,2537.134258170001,2.1688198665088794e-05,8.33166649961873e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,59704.78438187,2901.3814203899965,4.984047518053608e-06,8.896394614750818e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,60071.861436064995,3268.4584745849934,8.452178764052819e-06,8.206730039237845e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0
+AT2020yue,W1.wise,60435.98879698,3632.5858354999946,6.1961479579361985e-06,8.27318136319294e-06,catalog flux units,AT2020yue.json.txt,positive finite flux/error only; time shifted per band to min(time)=0

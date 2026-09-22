@@ -1,0 +1,2 @@
+event,band,time_original,time_days,magnitude,magnitude_error,flux,flux_err,flux_units,source_json,preprocessing
+AT2019qiz,G,58759.0579977,0.0,16.04,0.2,3.8370724549227845e-07,7.068148668354619e-08,relative flux proxy from magnitude conversion,AT2019qiz.json.txt,upper limits excluded; finite positive flux/error; time shifted per band to min(time)=0
