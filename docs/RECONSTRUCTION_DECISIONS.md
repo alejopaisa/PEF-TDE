@@ -62,3 +62,22 @@ DEC-001 freezes only the identifiability requirement. The definition and numeric
 | Date Frozen | 2026-09-23 |
 
 DEC-002 freezes the separation between the core classification space and expanded robustness/model-adequacy comparisons. It does not choose the statistical selection criterion, information-criterion thresholds, goodness-of-fit thresholds, or the specific alternative models to be used.
+
+## DEC-003
+
+| Field | Entry |
+|---|---|
+| Decision ID | DEC-003 |
+| Title / Topic | Canonical temporal coordinate and cross-band alignment |
+| Scientific Question | What temporal reference should define reconstructed PEF–TDE timestamps so that different photometric bands preserve their true calendar alignment without assigning an artificial physical meaning to time zero? |
+| Historical Method | The historical processed light curves use a band-relative coordinate: `time_days = MJD - min(MJD retained in that band)`. The reproducible temporal-coordinate audit verifies this relation for all 27 historical event-band datasets with maximum reconstruction error 0.0 days. Because the first retained MJD differs by band, historical `time_days=0` does not represent a common calendar epoch within multi-band events. |
+| Historical Evidence Level | A for the recovered historical coordinate definition, supported by the processed data and reproducible temporal audit. |
+| Reconstruction Decision | Source MJD timestamps are the canonical temporal reference for the reconstructed analysis. The reconstructed pipeline must not independently redefine time zero for each photometric band. A translated numerical coordinate may be used internally for numerical convenience, provided that the translation: 1. is derived explicitly from source MJD, 2. is applied consistently across the relevant bands, 3. is documented and reproducible, 4. is exactly reversible to MJD, and 5. is not assigned physical meaning. Publication-reference epochs such as reported peak times remain scientific metadata and are not automatically adopted as the coordinate origin. |
+| Scientific Justification | The validated temporal audit demonstrates that band-specific historical zero dates differ across bands of the same event. Verified spreads include approximately: AT2019qiz = 6.78 d; AT2020wey = 1467.81 d; AT2020ysg = 2000.35 d; AT2020yue = 1679.10 d; AT2020zso = 2366.46 d. Independent band-relative zeroing can therefore make physically different calendar epochs appear aligned when plotted or modeled in the historical `time_days` coordinate. Using source MJD as the canonical reference preserves observational calendar alignment while allowing any later numerical centering to remain a pure coordinate transformation. |
+| Affected Data | Reconstructed temporal representations derived from the 27 historical event-band datasets and future reconstructed datasets. |
+| Affected Results | Future fitting inputs, model parameters expressed in time coordinates, cross-band comparisons, diagnostic plots, tables, and reproducibility metadata. |
+| Affected Paper Sections | Framework and Methodology; Fitting Procedure; Results; Figures; Appendices. |
+| Status | FROZEN |
+| Date Frozen | 2026-09-23 |
+
+DEC-003 freezes the canonical timestamp reference and cross-band alignment rule only. It does not choose the internal numerical centering constant, observer-frame versus rest-frame fitting, the free/fixed/shared/constrained treatment of t0, the physical interpretation of t0, or the fixed exponential reference time required by DEC-001.
