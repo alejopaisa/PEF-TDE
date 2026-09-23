@@ -81,3 +81,22 @@ DEC-002 freezes the separation between the core classification space and expande
 | Date Frozen | 2026-09-23 |
 
 DEC-003 freezes the canonical timestamp reference and cross-band alignment rule only. It does not choose the internal numerical centering constant, observer-frame versus rest-frame fitting, the free/fixed/shared/constrained treatment of t0, the physical interpretation of t0, or the fixed exponential reference time required by DEC-001.
+
+## DEC-004
+
+| Field | Entry |
+|---|---|
+| Decision ID | DEC-004 |
+| Title / Topic | Adopted reconstruction redshifts |
+| Scientific Question | Which redshift value should the reconstructed PEF-TDE analysis use for each event when repository metadata and published literature differ slightly? |
+| Historical Method | Recovered raw JSON files contain redshift metadata for all six events. A dedicated reconstruction provenance audit subsequently compared those values against literature-supported redshifts. |
+| Historical Evidence Level | A for the repository redshift values as preserved metadata. Published-source provenance is documented in `data/metadata/RECONSTRUCTION_REDSHIFT_PROVENANCE.csv`. |
+| Reconstruction Decision | Adopt the literature-supported redshift values recorded in the reconstruction provenance table: AT2018hyz = 0.04573; AT2019qiz = 0.01513; AT2020wey = 0.02738; AT2020ysg = 0.277; AT2020yue = 0.204; AT2020zso = 0.0563. These values are adopted reconstruction metadata and are not presented as new redshift measurements by this work. |
+| Scientific Justification | Where repository metadata and published values agree, the common value is retained. Where small differences exist, the documented literature value is preferred so that cosmological time transformations and other redshift-dependent quantities are tied to an explicit published provenance rather than inherited metadata of uncertain precision. For AT2020yue, the adopted value is the currently verified published value 0.204; the additional fourth decimal place in the repository value 0.2042 has not been independently verified from the cited publication. The numerical differences involved are small, but explicit provenance is required for reproducibility. |
+| Affected Data | No raw data are modified. |
+| Affected Results | Future redshift-dependent temporal transformations and any quantities explicitly derived using event redshift. |
+| Affected Paper Sections | Data; Fitting Procedure; Results where rest-frame quantities may later be reported; Appendices. |
+| Status | FROZEN |
+| Date Frozen | 2026-09-22 |
+
+DEC-004 freezes only the adopted event redshifts. It does not decide whether reconstructed fitting or reported timescales use observer-frame or rest-frame time. That remains a separate reconstruction decision.
