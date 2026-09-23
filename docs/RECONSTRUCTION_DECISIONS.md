@@ -78,7 +78,7 @@ DEC-002 freezes the separation between the core classification space and expande
 | Affected Results | Future fitting inputs, model parameters expressed in time coordinates, cross-band comparisons, diagnostic plots, tables, and reproducibility metadata. |
 | Affected Paper Sections | Framework and Methodology; Fitting Procedure; Results; Figures; Appendices. |
 | Status | FROZEN |
-| Date Frozen | 2026-09-23 |
+| Date Frozen | 2026-09-22 |
 
 DEC-003 freezes the canonical timestamp reference and cross-band alignment rule only. It does not choose the internal numerical centering constant, observer-frame versus rest-frame fitting, the free/fixed/shared/constrained treatment of t0, the physical interpretation of t0, or the fixed exponential reference time required by DEC-001.
 
