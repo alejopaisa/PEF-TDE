@@ -100,3 +100,24 @@ DEC-003 freezes the canonical timestamp reference and cross-band alignment rule 
 | Date Frozen | 2026-09-22 |
 
 DEC-004 freezes only the adopted event redshifts. It does not decide whether reconstructed fitting or reported timescales use observer-frame or rest-frame time. That remains a separate reconstruction decision.
+
+## DEC-005
+
+| Field | Entry |
+|---|---|
+| Decision ID | DEC-005 |
+| Title / Topic | Rest-frame temporal scaling for reconstructed fitting |
+| Scientific Question | Should the elapsed times entering reconstructed PEF-TDE model fitting and the resulting fitted temporal parameters be expressed in the observer frame or in the source rest frame? |
+| Historical Method | The recovered historical processed light curves store `time_days` from observer-frame MJD differences, with no redshift correction in the stored coordinate. The exact internal treatment of cosmological time dilation in the historical fitting implementation is not independently recoverable and must not be guessed. |
+| Historical Evidence Level | A for the recovered stored time coordinate and its observer-frame MJD basis. D for any unrecovered additional transformation that may or may not have occurred inside the historical fitting implementation. |
+| Reconstruction Decision | Source MJD remains the canonical timestamp reference established by DEC-003. Elapsed times entering reconstructed model equations will be expressed in source rest-frame days using the event redshift frozen by DEC-004. For an event-level numerical centering constant `C_event`: `t_model = (MJD - C_event) / (1 + z_adopted)`. All reconstructed fitted temporal parameters and model-facing temporal intervals will therefore use rest-frame days. This includes, where applicable: tau; fitted temporal offsets such as t0; the fixed exponential reference-time coordinate once later defined; future model-facing temporal bounds or constraints; and temporal residual/diagnostic quantities when they depend on elapsed time. Raw timestamps and literature epochs expressed as MJD remain stored and reported as observer-frame calendar timestamps unless explicitly converted as elapsed intervals. |
+| Scientific Justification | Cosmological time dilation scales observed temporal intervals by `(1 + z)`. Therefore: `delta_t_rest = delta_t_observer / (1 + z)` and, for an exponential timescale: `tau_rest = tau_observer / (1 + z)`. The adopted event redshifts span a range for which this correction is not uniform across the sample. Using rest-frame elapsed times provides a common intrinsic temporal scale for comparisons among events while preserving source MJD as the canonical observational timestamp. A consistent linear time rescaling does not change the underlying functional model family. Any future model bounds, reference epochs, or other time-dependent numerical settings must therefore be defined consistently in the same rest-frame coordinate. The numerical normalization A of the fallback power-law term is coordinate-dependent under time rescaling and must not be compared between frame conventions without the appropriate transformation. |
+| Affected Data | No raw timestamps or flux measurements are modified. |
+| Affected Results | Future reconstructed fits, tau values, fitted temporal offsets, cross-event timescale comparisons, temporal diagnostics, tables, and figures. |
+| Affected Paper Sections | Framework and Methodology; Fitting Procedure; Results; Discussion; Tables; Figures; Appendices. |
+| Status | FROZEN |
+| Date Frozen | 2026-09-22 |
+
+DEC-005 freezes the temporal scaling convention only. It does not choose C_event, the physical interpretation or free/fixed/shared/constrained treatment of t0, the fixed exponential reference time, parameter bounds, optimizer settings, or model-selection criteria.
+
+Historical tau values must not be silently relabeled as rest-frame values unless their historical frame treatment is independently verified or an explicit post-hoc conversion is documented.
