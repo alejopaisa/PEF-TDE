@@ -121,3 +121,26 @@ DEC-004 freezes only the adopted event redshifts. It does not decide whether rec
 DEC-005 freezes the temporal scaling convention only. It does not choose C_event, the physical interpretation or free/fixed/shared/constrained treatment of t0, the fixed exponential reference time, parameter bounds, optimizer settings, or model-selection criteria.
 
 Historical tau values must not be silently relabeled as rest-frame values unless their historical frame treatment is independently verified or an explicit post-hoc conversion is documented.
+
+## DEC-006
+
+| Field | Entry |
+|---|---|
+| Decision ID | DEC-006 |
+| Title / Topic | Reconstructed measurement preprocessing and sign-neutral flux inclusion |
+| Scientific Question | Which individual photometric measurements should be retained as valid candidates for reconstructed PEF-TDE fitting before any temporal fitting window is applied? |
+| Historical Method | The reproducible historical preprocessing audit establishes that all 23 historical 2020 flux-based event-band samples were generated using: finite(flux) AND finite(flux_err) AND flux > 0 AND flux_err > 0. The same audit verifies the four historical magnitude-based analyzed datasets using finite magnitude measurements, non-upper-limit selection where applicable, and finite positive magnitude uncertainties. |
+| Historical Evidence Level | A for the recovered historical preprocessing rules, supported by raw data, processed data, deterministic audit script, and machine-readable audit results. |
+| Reconstruction Decision | For flux-based reconstructed datasets, a measurement is eligible for later fitting when: 1. flux is finite, 2. flux uncertainty is finite, and 3. flux uncertainty is strictly positive. No requirement is imposed on the sign of the measured flux. Therefore finite positive, zero, and negative flux measurements with valid positive uncertainties remain eligible reconstructed measurements. The historical flux > 0 truncation will NOT be applied to reconstructed flux-based datasets. For magnitude-based datasets, eligible detection measurements require: 1. finite magnitude, 2. finite strictly positive magnitude uncertainty, and 3. non-upper-limit status where that information is available. Upper limits will not be treated as ordinary detections in the core least-squares fitting dataset. If magnitude measurements are converted to a flux-like representation for model fitting, that transformation and uncertainty propagation must be explicit and reproducible. |
+| Scientific Justification | For difference-photometry, host-subtracted, baseline-subtracted, or otherwise background-referenced flux measurements, negative and zero measured flux values can be statistically valid realizations. Conditioning the retained sample on measured flux being positive truncates the measurement distribution and can shift its mean and median upward. The reproducible historical preprocessing audit demonstrates that this effect is relevant to many of the historical 2020 datasets, while not establishing that any historical model classification was caused by that preprocessing. A sign-neutral measurement eligibility rule preserves the measured noise distribution more faithfully and avoids conditioning the fitting sample directly on the observed flux sign. Upper limits require a censored-data likelihood or another explicit statistical treatment and therefore are not treated as ordinary detections in the core reconstructed fitting sample. |
+| Affected Data | Future reconstructed/cleaned light-curve datasets generated from the recovered raw measurements. No recovered raw files are modified. |
+| Affected Results | Future fitting samples, flux distributions, model fits, floor estimates, residual diagnostics, information criteria, classifications, and robustness tests. |
+| Affected Paper Sections | Data; Fitting Procedure; Results; Robustness; Discussion; Appendices. |
+| Status | FROZEN |
+| Date Frozen | 2026-09-23 |
+
+DEC-006 defines measurement-level eligibility only. It does not define the temporal fitting window. A measurement may be valid under DEC-006 and still be excluded later by an independently frozen temporal-window rule.
+
+DEC-006 does not conclude that historical Floor classifications were caused by positive-flux truncation and does not invalidate any historical classification. Those questions require reconstructed model fits.
+
+DEC-006 does not define a censored-likelihood treatment for upper limits. Upper limits remain available in the raw source data for possible future robustness analysis.
