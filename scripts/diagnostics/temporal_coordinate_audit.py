@@ -11,7 +11,6 @@ methodology choice.
 from __future__ import annotations
 
 import csv
-import json
 import math
 from pathlib import Path
 from typing import Iterable
@@ -19,8 +18,10 @@ from typing import Iterable
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SAMPLE_PATH = REPO_ROOT / "data" / "metadata" / "HISTORICAL_ANALYSIS_SAMPLE.csv"
+REDSHIFT_PROVENANCE_PATH = (
+    REPO_ROOT / "data" / "metadata" / "RECONSTRUCTION_REDSHIFT_PROVENANCE.csv"
+)
 PROCESSED_DIR = REPO_ROOT / "data" / "processed"
-RAW_DIR = REPO_ROOT / "data" / "raw"
 OUTPUT_DIR = REPO_ROOT / "results" / "reconstruction" / "temporal"
 
 REFERENCE_EPOCHS = {
@@ -106,8 +107,8 @@ EVENT_FIELDS = [
 NOTES = (
     "Historical per-band zero is the first retained observation in each band; "
     "publication reference retained from accepted prior audit and remains "
-    "pending literature-provenance verification; redshift read from recovered "
-    "raw JSON."
+    "pending literature-provenance verification; redshift taken from the "
+    "frozen reconstruction redshift provenance table."
 )
 
 
@@ -167,16 +168,49 @@ def read_processed(event: str, band: str) -> list[dict[str, float]]:
     return sorted(out, key=lambda item: item["mjd"])
 
 
-def read_redshift(event: str) -> float:
-    path = RAW_DIR / f"{event}.json"
-    with path.open(encoding="utf-8") as handle:
-        payload = json.load(handle)
-    if event in payload:
-        redshift = payload[event]["redshift"]
-        if isinstance(redshift, list):
-            redshift = redshift[0]
-        return float(redshift["value"])
-    return float(payload["z"])
+def read_adopted_redshifts(expected_events: list[str]) -> dict[str, dict[str, object]]:
+    with REDSHIFT_PROVENANCE_PATH.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    expected = set(expected_events)
+    seen: set[str] = set()
+    redshifts: dict[str, dict[str, object]] = {}
+
+    for row in rows:
+        event = row["event"]
+        if event in seen:
+            raise RuntimeError(f"Duplicate redshift provenance row for {event}")
+        seen.add(event)
+
+        if event not in expected:
+            raise RuntimeError(f"Unexpected redshift provenance event {event}")
+
+        redshift = row["adopted_reconstruction_redshift"].strip()
+        if not redshift:
+            raise RuntimeError(f"Missing adopted reconstruction redshift for {event}")
+
+        status = row["adoption_status"].strip()
+        if not status:
+            raise RuntimeError(f"Missing redshift adoption status for {event}")
+
+        redshifts[event] = {
+            "redshift": float(redshift),
+            "provenance_status": status,
+        }
+
+    missing = sorted(expected - seen)
+    if missing:
+        raise RuntimeError(
+            "Missing redshift provenance row(s) for " + ", ".join(missing)
+        )
+
+    if len(redshifts) != len(expected_events):
+        raise RuntimeError(
+            f"Expected {len(expected_events)} redshift provenance rows, "
+            f"found {len(redshifts)}"
+        )
+
+    return redshifts
 
 
 def max_abs_time_error(rows: list[dict[str, float]], mjd_min: float) -> float:
@@ -227,7 +261,7 @@ def main() -> int:
         event_common_zero[event] = min(all_mjds)
         event_latest[event] = max(all_mjds)
 
-    redshifts = {event: read_redshift(event) for event in events}
+    redshifts = read_adopted_redshifts(events)
 
     audit_rows = []
     pass_n = 0
@@ -257,7 +291,8 @@ def main() -> int:
         reference_mjd = reference["mjd"]
         pre = sum(1 for mjd in mjds if mjd - reference_mjd < 0.0)
         post = sum(1 for mjd in mjds if mjd - reference_mjd >= 0.0)
-        redshift = redshifts[event]
+        redshift = redshifts[event]["redshift"]
+        redshift_status = redshifts[event]["provenance_status"]
 
         audit_rows.append(
             {
@@ -286,7 +321,7 @@ def main() -> int:
                 "fraction_pre_reference": pre / float(n),
                 "fraction_post_reference": post / float(n),
                 "redshift": redshift,
-                "redshift_provenance_status": "REPOSITORY_RAW_JSON",
+                "redshift_provenance_status": redshift_status,
                 "baseline_rest_days": baseline / (1.0 + redshift),
             }
         )
@@ -298,7 +333,8 @@ def main() -> int:
         earliest = min(zero_dates)
         latest = max(row["mjd_last"] for row in event_bands)
         span = latest - earliest
-        redshift = redshifts[event]
+        redshift = redshifts[event]["redshift"]
+        redshift_status = redshifts[event]["provenance_status"]
         reference = REFERENCE_EPOCHS[event]
         event_rows.append(
             {
@@ -312,7 +348,7 @@ def main() -> int:
                 "publication_reference_type": reference["type"],
                 "publication_reference_provenance_status": reference["provenance"],
                 "redshift": redshift,
-                "redshift_provenance_status": "REPOSITORY_RAW_JSON",
+                "redshift_provenance_status": redshift_status,
                 "observer_frame_span_days": span,
                 "rest_frame_span_days": span / (1.0 + redshift),
                 "notes": NOTES,
