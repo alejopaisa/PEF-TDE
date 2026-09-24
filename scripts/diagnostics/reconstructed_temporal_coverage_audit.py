@@ -29,8 +29,8 @@ MANIFEST_PATH = (
 REDSHIFT_PATH = (
     REPO_ROOT / "data" / "metadata" / "RECONSTRUCTION_REDSHIFT_PROVENANCE.csv"
 )
-TEMPORAL_EVENT_SUMMARY_PATH = (
-    REPO_ROOT / "results" / "reconstruction" / "temporal" / "TEMPORAL_EVENT_SUMMARY.csv"
+REFERENCE_PROVENANCE_PATH = (
+    REPO_ROOT / "data" / "metadata" / "RECONSTRUCTION_REFERENCE_EPOCH_PROVENANCE.csv"
 )
 PROCESSED_DIR = REPO_ROOT / "data" / "processed"
 OUTPUT_DIR = REPO_ROOT / "results" / "reconstruction" / "temporal"
@@ -218,20 +218,29 @@ def read_redshifts(events: set[str]) -> dict[str, float]:
 
 
 def read_reference_epochs(events: set[str]) -> dict[str, dict[str, object]]:
-    rows = read_csv(TEMPORAL_EVENT_SUMMARY_PATH)
+    rows = read_csv(REFERENCE_PROVENANCE_PATH)
     out: dict[str, dict[str, object]] = {}
     seen: set[str] = set()
     for row in rows:
         event = row["event"]
         if event in seen:
-            raise RuntimeError(f"Duplicate temporal reference row for {event}")
+            raise RuntimeError(f"Duplicate reference epoch row for {event}")
         seen.add(event)
+        if event not in events:
+            raise RuntimeError(f"Unexpected reference epoch event {event}")
+        if row["value_verification_status"] != "VERIFIED_EXACT":
+            raise RuntimeError(f"Unexpected reference epoch verification status for {event}")
+        if row["absolute_mjd_status"] != "ABSOLUTE_MJD_NOT_DIVIDED_BY_1_PLUS_Z":
+            raise RuntimeError(f"Unexpected absolute MJD status for {event}")
+        reference_type = row["reference_epoch_type"].strip()
+        if not reference_type:
+            raise RuntimeError(f"Blank reference epoch type for {event}")
         if event not in events:
             continue
         out[event] = {
-            "mjd": finite_float(row["publication_reference_mjd"], f"{event} reference MJD"),
-            "type": row["publication_reference_type"],
-            "provenance": row["publication_reference_provenance_status"],
+            "mjd": finite_float(row["reference_mjd"], f"{event} reference MJD"),
+            "type": reference_type,
+            "provenance": row["value_verification_status"],
         }
     missing = sorted(events - set(out))
     if missing:

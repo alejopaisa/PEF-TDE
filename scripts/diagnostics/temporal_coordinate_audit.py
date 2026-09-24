@@ -21,41 +21,11 @@ SAMPLE_PATH = REPO_ROOT / "data" / "metadata" / "HISTORICAL_ANALYSIS_SAMPLE.csv"
 REDSHIFT_PROVENANCE_PATH = (
     REPO_ROOT / "data" / "metadata" / "RECONSTRUCTION_REDSHIFT_PROVENANCE.csv"
 )
+REFERENCE_PROVENANCE_PATH = (
+    REPO_ROOT / "data" / "metadata" / "RECONSTRUCTION_REFERENCE_EPOCH_PROVENANCE.csv"
+)
 PROCESSED_DIR = REPO_ROOT / "data" / "processed"
 OUTPUT_DIR = REPO_ROOT / "results" / "reconstruction" / "temporal"
-
-REFERENCE_EPOCHS = {
-    "AT2018hyz": {
-        "mjd": 58429.0,
-        "type": "bolometric_peak",
-        "provenance": "PENDING_LITERATURE_VERIFICATION",
-    },
-    "AT2019qiz": {
-        "mjd": 58764.0,
-        "type": "bolometric_peak",
-        "provenance": "PENDING_LITERATURE_VERIFICATION",
-    },
-    "AT2020wey": {
-        "mjd": 59152.0,
-        "type": "r_band_peak",
-        "provenance": "PENDING_LITERATURE_VERIFICATION",
-    },
-    "AT2020ysg": {
-        "mjd": 59122.64,
-        "type": "fitted_lightcurve_peak",
-        "provenance": "PENDING_LITERATURE_VERIFICATION",
-    },
-    "AT2020yue": {
-        "mjd": 59179.44,
-        "type": "fitted_rest_frame_g_band_peak",
-        "provenance": "PENDING_LITERATURE_VERIFICATION",
-    },
-    "AT2020zso": {
-        "mjd": 59184.0,
-        "type": "bolometric_peak",
-        "provenance": "PENDING_LITERATURE_VERIFICATION",
-    },
-}
 
 AUDIT_FIELDS = [
     "event",
@@ -106,9 +76,10 @@ EVENT_FIELDS = [
 
 NOTES = (
     "Historical per-band zero is the first retained observation in each band; "
-    "publication reference retained from accepted prior audit and remains "
-    "pending literature-provenance verification; redshift taken from the "
-    "frozen reconstruction redshift provenance table."
+    "publication reference epochs are loaded from the verified reconstruction "
+    "reference-epoch provenance table and remain heterogeneous descriptive "
+    "anchors; redshift taken from the frozen reconstruction redshift provenance "
+    "table."
 )
 
 
@@ -213,6 +184,59 @@ def read_adopted_redshifts(expected_events: list[str]) -> dict[str, dict[str, ob
     return redshifts
 
 
+def read_reference_epochs(expected_events: list[str]) -> dict[str, dict[str, object]]:
+    with REFERENCE_PROVENANCE_PATH.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+
+    expected = set(expected_events)
+    seen: set[str] = set()
+    references: dict[str, dict[str, object]] = {}
+
+    for row in rows:
+        event = row["event"]
+        if event in seen:
+            raise RuntimeError(f"Duplicate reference epoch row for {event}")
+        seen.add(event)
+
+        if event not in expected:
+            raise RuntimeError(f"Unexpected reference epoch event {event}")
+
+        reference_mjd = row["reference_mjd"].strip()
+        if not reference_mjd:
+            raise RuntimeError(f"Missing reference MJD for {event}")
+        reference_mjd_float = float(reference_mjd)
+        if not math.isfinite(reference_mjd_float):
+            raise RuntimeError(f"Non-finite reference MJD for {event}")
+
+        if row["value_verification_status"] != "VERIFIED_EXACT":
+            raise RuntimeError(f"Unexpected reference epoch verification status for {event}")
+
+        if row["absolute_mjd_status"] != "ABSOLUTE_MJD_NOT_DIVIDED_BY_1_PLUS_Z":
+            raise RuntimeError(f"Unexpected absolute MJD status for {event}")
+
+        reference_type = row["reference_epoch_type"].strip()
+        if not reference_type:
+            raise RuntimeError(f"Missing reference epoch type for {event}")
+
+        references[event] = {
+            "mjd": reference_mjd_float,
+            "type": reference_type,
+            "provenance": row["value_verification_status"],
+        }
+
+    missing = sorted(expected - seen)
+    if missing:
+        raise RuntimeError("Missing reference epoch row(s) for " + ", ".join(missing))
+
+    if len(references) != len(expected_events):
+        raise RuntimeError(
+            f"Expected {len(expected_events)} reference epoch rows, "
+            f"found {len(references)}"
+        )
+
+    return references
+
+
 def max_abs_time_error(rows: list[dict[str, float]], mjd_min: float) -> float:
     return max(abs((row["mjd"] - mjd_min) - row["time_days"]) for row in rows)
 
@@ -262,6 +286,7 @@ def main() -> int:
         event_latest[event] = max(all_mjds)
 
     redshifts = read_adopted_redshifts(events)
+    reference_epochs = read_reference_epochs(events)
 
     audit_rows = []
     pass_n = 0
@@ -287,7 +312,7 @@ def main() -> int:
             pass_time += 1
 
         cadences = [mjds[index] - mjds[index - 1] for index in range(1, len(mjds))]
-        reference = REFERENCE_EPOCHS[event]
+        reference = reference_epochs[event]
         reference_mjd = reference["mjd"]
         pre = sum(1 for mjd in mjds if mjd - reference_mjd < 0.0)
         post = sum(1 for mjd in mjds if mjd - reference_mjd >= 0.0)
@@ -335,7 +360,7 @@ def main() -> int:
         span = latest - earliest
         redshift = redshifts[event]["redshift"]
         redshift_status = redshifts[event]["provenance_status"]
-        reference = REFERENCE_EPOCHS[event]
+        reference = reference_epochs[event]
         event_rows.append(
             {
                 "event": event,

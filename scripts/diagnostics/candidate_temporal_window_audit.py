@@ -29,10 +29,9 @@ REDSHIFT_PATH = (
 )
 REFERENCE_PATH = (
     REPO_ROOT
-    / "results"
-    / "reconstruction"
-    / "temporal"
-    / "RECONSTRUCTED_ELIGIBLE_EVENT_SUMMARY.csv"
+    / "data"
+    / "metadata"
+    / "RECONSTRUCTION_REFERENCE_EPOCH_PROVENANCE.csv"
 )
 OUTPUT_DIR = REPO_ROOT / "results" / "reconstruction" / "temporal"
 DETAIL_PATH = OUTPUT_DIR / "CANDIDATE_TEMPORAL_WINDOW_AUDIT.csv"
@@ -314,13 +313,24 @@ def read_redshifts(events: set[str]) -> dict[str, float]:
 def read_reference_epochs(events: set[str]) -> dict[str, dict[str, object]]:
     rows = read_csv(REFERENCE_PATH)
     out: dict[str, dict[str, object]] = {}
+    seen: set[str] = set()
     for row in rows:
         event = row["event"]
+        if event in seen:
+            raise RuntimeError(f"Duplicate reference epoch row for {event}")
+        seen.add(event)
         if event not in events:
-            continue
+            raise RuntimeError(f"Unexpected reference epoch event {event}")
+        if row["value_verification_status"] != "VERIFIED_EXACT":
+            raise RuntimeError(f"Unexpected reference epoch verification status for {event}")
+        if row["absolute_mjd_status"] != "ABSOLUTE_MJD_NOT_DIVIDED_BY_1_PLUS_Z":
+            raise RuntimeError(f"Unexpected absolute MJD status for {event}")
+        reference_type = row["reference_epoch_type"].strip()
+        if not reference_type:
+            raise RuntimeError(f"Blank reference epoch type for {event}")
         out[event] = {
-            "mjd": finite_float(row["publication_reference_mjd"], f"{event} reference MJD"),
-            "type": row["reference_epoch_type"],
+            "mjd": finite_float(row["reference_mjd"], f"{event} reference MJD"),
+            "type": reference_type,
         }
     missing = sorted(events - set(out))
     if missing:
