@@ -1,0 +1,11 @@
+event,alternative_mjd,uncertainty_minus_days,uncertainty_plus_days,alternative_definition,derivation_method,source_authors,source_year,source_title,doi,source_location,difference_from_current_days,provenance_note
+AT2018hyz,58428,,,empirical light-curve-model peak quoted by Gomez et al.,,Gomez et al.,2020,,10.1093/mnras/staa2099,,-1.00,Original source not independently reconstructed in this audit.
+AT2018hyz,58424.96,6.63,7.90,uniform K-corrected multiband fitted t_peak,,Hammerstein et al.,2023,,10.3847/1538-4357/aca283,,-4.04,
+AT2019qiz,58761.4,0.6,0.6,inferred optical peak,,Malyali et al.,2024,,,"",-2.60,Secondary attribution to van Velzen et al.
+AT2019qiz,58766.50,0.26,0.25,fitted rest-frame g-band maximum,,Yao et al.,2023,,10.3847/2041-8213/acf216,,2.50,
+AT2019qiz,58767.61,0.61,0.60,uniform K-corrected multiband fitted t_peak,,Hammerstein et al.,2023,,10.3847/1538-4357/aca283,,3.61,
+AT2020wey,59155.84,0.20,0.19,"fitted rest-frame g-band maximum, Yao r1+d5",,Yao et al.,2023,,10.3847/2041-8213/acf216,,3.84,
+AT2020wey,59156.58,0.51,0.43,uniform K-corrected multiband fitted t_peak,,Hammerstein et al.,2023,,10.3847/1538-4357/aca283,,4.58,
+AT2020ysg,59094.32,3.03,3.30,"fitted rest-frame g-band maximum, Yao r1+d2",,Yao et al.,2023,,10.3847/2041-8213/acf216,,-28.32,Large discrepancy remains documentary unresolved beyond known differences in modeling/data coverage.
+AT2020zso,59188.04,1.35,1.37,uniform K-corrected multiband fitted t_peak,,Hammerstein et al.,2023,,10.3847/1538-4357/aca283,,4.04,
+AT2020zso,59195,,,optical-light-curve inferred peak,,Wichern et al.,2026,,, ,11.00,
